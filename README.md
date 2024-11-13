@@ -1,38 +1,24 @@
-# create-svelte
+# Blog ver.3
+## build 관련
+- ~~빌드 초기화 기능~~
+    - 2024-11-08 17:59:23
+    - ~~_build 파일이 없는 경우도 처리~~
+- json 파일 생성 기능
+    - path alias 기능 구현
+    - npm run build 명령어 실행시 코드상으로 path alias 를 포함한 json생성 기능 작성
+- ~~main.js 코드 모듈화 정리~~ 
+    - 2024-11-08 17:59:29
+- markdown 변환 라이브러리 제작
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+## content 관련
+- main page 작성
 
-## Creating a project
+## page 관련
+- 데이터 조회 기능 구현
+- folder 태그 collapse 기능 구현
+- 페이지 반응형 기능 구현
+- 이전/다음 글 이동
+- 멘위로 이동
 
-If you're seeing this, you've probably already done this step. Congrats!
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+https://cdn.jsdelivr.net/gh/ballboyDev/ballboyDev/README.md
