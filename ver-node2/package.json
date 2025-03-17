@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "tree": "NODE_ENV=tree node index.js"
+    "dev": "NODE_ENV=dev node index.js",
+    "build": "NODE_ENV=build node index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fs": "^0.0.1-security"
+    "fs": "^0.0.1-security",
+    "markdown-it": "^14.1.0"
   }
 }

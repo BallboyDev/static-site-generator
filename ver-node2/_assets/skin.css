@@ -5,8 +5,13 @@
     color: rgb(236, 244, 251);
 }
 
+a {
+    text-decoration: none;
+}
+
 body {
-    background-color: rgb(23, 24, 25);
+    /* background-color: rgb(23, 24, 25); */
+    background-color: rgb(12, 14, 18);
 }
 
 /* common */
@@ -88,4 +93,13 @@ body {
 #contents {
     margin-left: 16rem;
     height: 100%;
+    /* padding: 2rem auto; */
+}
+
+#contents>.post {
+    margin: 0 auto;
+    padding: 2rem 0;
+    overflow: scroll;
+    width: 45rem;
+    /* height: 100%; */
 }
