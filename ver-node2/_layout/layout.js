@@ -2,7 +2,7 @@ const layout = {
     profile: () => {
         return `
             <div class="profile">
-                <div class="img"></div>
+                <img class="img" src="../_assets/img/profile.jpeg" alt="" srcset="">
                 <p>ballboy's blog</p>
                 <p>welcome to my world</p>
             </div>

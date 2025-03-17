@@ -11,7 +11,7 @@ a {
 
 body {
     /* background-color: rgb(23, 24, 25); */
-    background-color: rgb(12, 14, 18);
+    background-color: #0d1117;
 }
 
 /* common */
@@ -47,6 +47,7 @@ body {
     margin-bottom: 1rem;
     background-color: gray;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 #side-bar>.category {
