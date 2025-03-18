@@ -7,4 +7,4 @@
 [![Static Badge](https://img.shields.io/badge/%40ballboy.329-FFFFFF?style=for-the-badge&logo=instagram&logoColor=FFFFFF&label=INSTA&labelColor=E4405F)](https://www.instagram.com/ballboy.329)
 
 
-![test](<../_assets/img/1.png>)
+![test](<../_assets/img/이미지 준비중.png>)

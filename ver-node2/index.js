@@ -20,7 +20,7 @@ const json = {
 const utils = {
     sideBar: '',
     dirNumber: [],
-    baseFile: ['index.md', 'develop.md'],
+    baseFile: ['index.md', 'develop.md', 'template.md'],
     clear: () => {
         console.log('##### [ clear ] #####')
 
@@ -58,7 +58,7 @@ const utils = {
                     html_sideBar = `${html_sideBar}\n<ul id="c-${dirNum}" style="display: d-[${dirNum}];">\n${makeSideBar(`${root}/${v}`)}\n</ul>`
                 } else {
                     const [title, date, fileNum] = path.basename(v, path.extname(v)).split('_')
-                    if (!!fileNum) {
+                    if (parseInt(fileNum) !== 0) {
                         html_sideBar = `${html_sideBar}\n<a href="${json[process.env.NODE_ENV].url}/post/${fileNum}.html"><li class="docu s-[${fileNum}]">${title}</li></a>`
                     }
 
@@ -96,9 +96,9 @@ const utils = {
                         sideBar = sideBar.replace(`d-[${v}]`, (fold.indexOf(v) >= 0) ? 'block' : 'none')
                     })
 
-                    let temp = layout.post(sideBar, markdownIt().render(mdFile))
+                    let temp = layout.post(json[process.env.NODE_ENV].url, sideBar, markdownIt().render(mdFile))
                     temp = temp.replaceAll(`s-[${fileNum}]`, `selected`)
-                    temp = temp.replaceAll('../_assets/img/', `${json[process.env.NODE_ENV].url}/assets/img/`)
+                    temp = temp.replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
                     temp = temp.replaceAll('<h3><a href="">HOME</a></h3>', `<h3><a href="${json[process.env.NODE_ENV].url}/index.html">HOME</a></h3>`)
 
                     const contents = temp
@@ -116,6 +116,7 @@ const utils = {
         console.log('##### [ mkAssets ] #####')
 
         fs.copyFileSync(`${json.common.assets}/skin.css`, `${json.common.dist}/assets/skin.css`)
+        fs.copyFileSync(`${json.common.assets}/markdown.css`, `${json.common.dist}/assets/markdown.css`)
         fs.copyFileSync(`${json.common.assets}/skin.js`, `${json.common.dist}/assets/skin.js`)
         fs.cpSync(`${json.common.assets}/img/`, `${json.common.dist}/assets/img/`, { recursive: true })
 
@@ -132,16 +133,14 @@ const utils = {
         utils.baseFile.map((v) => {
             const mdFile = fs.readFileSync(`${json.common.post}/${v}`, 'utf8')
 
-            // const contents = layout.index(sideBar, markdownIt().render(mdFile))
-            // fs.writeFileSync(`${json.common.dist}/${path.basename(v, path.extname(v))}.html`, contents)
-
-
-            let temp = layout.post(sideBar, markdownIt().render(mdFile))
-            temp = temp.replaceAll('../_assets/img/', `${json[process.env.NODE_ENV].url}/assets/img/`)
+            let temp = layout.post(json[process.env.NODE_ENV].url, sideBar, markdownIt().render(mdFile))
+            temp = temp.replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
             temp = temp.replaceAll('<h3><a href="">HOME</a></h3>', `<h3><a href="${json[process.env.NODE_ENV].url}/index.html">HOME</a></h3>`)
 
             const contents = temp
             fs.writeFileSync(`${json.common.dist}/${path.basename(v, path.extname(v))}.html`, contents)
+
+            console.log(`${v} ==> ${json.common.dist}/${path.basename(v, path.extname(v))}.html`)
         })
     }
 

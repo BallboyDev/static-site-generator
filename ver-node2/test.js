@@ -1,5 +1,8 @@
-const path = require('path')
+let path = '"../../assets/img/1.png"'
 
-const temp = path.relative("/Users/daleseo/test.txt", "/Applications")
 
-console.log(temp)
+console.log(path)
+
+path = path.replace(/(?<=")[^"]*(?=\/assets)/g, 'ballboy')
+
+console.log(path)
