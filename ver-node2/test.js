@@ -1,8 +1,3 @@
-let path = '"../../assets/img/1.png"'
+const dayjs = require("dayjs");
 
-
-console.log(path)
-
-path = path.replace(/(?<=")[^"]*(?=\/assets)/g, 'ballboy')
-
-console.log(path)
+console.log(dayjs().format('YYYYMMDD'))

@@ -62,15 +62,19 @@ body {
 #side-bar>.category ul {
     /* display: none; */
     margin-left: 1rem;
+
+}
+
+#side-bar>.category>.root>ul {
+    margin-bottom: 1.5rem;
 }
 
 #side-bar>.category li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
     /* margin-right: 1rem; */
     list-style: none;
     cursor: pointer;
-    /* display: flex; */
-    /* justify-content: space-between; */
+
 }
 
 #side-bar>.category li:hover {
@@ -84,10 +88,16 @@ body {
 
 #side-bar>.category .cate {
     font-weight: bold;
+    /* display: flex;
+    align-items: center; */
 }
+
 
 #side-bar>.category .docu {
     color: rgb(189, 197, 203);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 /* contents */

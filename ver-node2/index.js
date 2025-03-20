@@ -3,6 +3,8 @@ const markdownIt = require('markdown-it')
 const { marked } = require('marked')
 const path = require('path')
 const layout = require('./_layout/layout')
+const { default: axios } = require('axios')
+const dayjs = require('dayjs')
 
 const json = {
     common: {
@@ -22,11 +24,15 @@ const utils = {
     sideBar: '',
     dirNumber: [],
     baseFile: ['index.md', 'develop.md', 'template.md'],
+    postList: [],
     clear: () => {
-        console.log('##### [ clear ] #####')
+        console.log('\n##### [ clear ] #####')
 
         if (fs.existsSync(json.common.dist)) {
             fs.rmSync(json.common.dist, { recursive: true })
+        }
+        if (fs.existsSync(`${__dirname}/list.md`)) {
+            fs.rmSync(`${__dirname}/list.md`)
         }
         fs.mkdirSync(`${json.common.dist}`)
         fs.mkdirSync(`${json.common.dist}/post`)
@@ -35,7 +41,7 @@ const utils = {
 
     },
     mkSideBar: () => {
-        console.log('##### [ mkSideBar ] #####')
+        console.log('\n##### [ mkSideBar ] #####')
 
         const dirNumber = []
 
@@ -74,7 +80,7 @@ const utils = {
         utils.sideBar = result
     },
     mkPost: () => {
-        console.log('##### [ mkPost ] #####')
+        console.log('\n##### [ mkPost ] #####')
 
         const mdToHtml = (root, fold = []) => {
             const post = fs.readdirSync(root)
@@ -97,17 +103,15 @@ const utils = {
                         sideBar = sideBar.replace(`d-[${v}]`, (fold.indexOf(v) >= 0) ? 'block' : 'none')
                     })
 
-                    let temp = layout.post(json[process.env.NODE_ENV].url, sideBar, markdownIt().render(mdFile))
-                    // let temp = layout.post(json[process.env.NODE_ENV].url, sideBar, marked.parse(mdFile))
-
-                    temp = temp.replaceAll(`s-[${fileNum}]`, `selected`)
+                    let temp = markdownIt().render(mdFile)
                     temp = temp.replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
-                    temp = temp.replaceAll('<h3><a href="">HOME</a></h3>', `<h3><a href="${json[process.env.NODE_ENV].url}/index.html">HOME</a></h3>`)
 
-                    const contents = temp
+                    const contents = layout.post(json[process.env.NODE_ENV].url, sideBar, temp).replaceAll(`s-[${fileNum}]`, `selected`)
                     fs.writeFileSync(`${json.common.dist}/post/${fileNum}.html`, contents)
 
                     console.log(`${v} ==> ${json.common.dist}/post/${fileNum}.html`)
+
+                    utils.postList.push(v)
 
                 }
             })
@@ -116,7 +120,7 @@ const utils = {
         mdToHtml(json.common.post)
     },
     mkAssets: () => {
-        console.log('##### [ mkAssets ] #####')
+        console.log('\n##### [ mkAssets ] #####')
 
         fs.copyFileSync(`${json.common.assets}/skin.css`, `${json.common.dist}/assets/skin.css`)
         fs.copyFileSync(`${json.common.assets}/markdown.css`, `${json.common.dist}/assets/markdown.css`)
@@ -125,7 +129,7 @@ const utils = {
 
     },
     mkIndex: () => {
-        console.log('##### [ mkIndex ] #####')
+        console.log('\n##### [ mkIndex ] #####')
 
         let sideBar = utils.sideBar
 
@@ -136,19 +140,48 @@ const utils = {
         utils.baseFile.map((v) => {
             const mdFile = fs.readFileSync(`${json.common.post}/${v}`, 'utf8')
 
-            let temp = layout.post(json[process.env.NODE_ENV].url, sideBar, markdownIt().render(mdFile))
-            // let temp = layout.post(json[process.env.NODE_ENV].url, sideBar, marked.parse(mdFile))
-
+            let temp = markdownIt().render(mdFile)
             temp = temp.replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
-            temp = temp.replaceAll('<h3><a href="">HOME</a></h3>', `<h3><a href="${json[process.env.NODE_ENV].url}/index.html">HOME</a></h3>`)
 
-            const contents = temp
+            const contents = layout.post(json[process.env.NODE_ENV].url, sideBar, temp)
             fs.writeFileSync(`${json.common.dist}/${path.basename(v, path.extname(v))}.html`, contents)
 
             console.log(`${v} ==> ${json.common.dist}/${path.basename(v, path.extname(v))}.html`)
         })
-    }
+    },
+    mkPostList: async () => {
+        console.log('\n##### [ mkPostList ] #####')
 
+        let contents = `# Post List (${dayjs().format('YYYYMMDD')})\n\n`
+        const list = []
+
+        for (let i = 0; i < utils.postList.length; i++) {
+            const [title, date, index] = path.basename(utils.postList[i], path.extname(utils.postList[i])).split('_')
+            let status = false
+
+            try {
+                let temp = await axios.get(`${json.build.url}/post/${index}.html`)
+                status = temp.status === 200
+            } catch (err) {
+                // console.log(err)
+            }
+
+            const post = {
+                title, date, index,
+                upload: status,
+                contents: `${index}. ${title}\n${date} => ${status ? `${json.build.url}/post/${index}.html` : 'no uploade'}\n\n`
+            }
+
+            list.push(post)
+        }
+
+        list.sort((a, b) => { return parseInt(a.index) - parseInt(b.index) }).map((v) => {
+            contents = `${contents}${v.contents}`
+            // console.log(v.contents)
+        })
+
+        fs.writeFileSync(`${__dirname}/posting.md`, contents)
+    }
 }
 
 const main = {
@@ -162,7 +195,7 @@ const main = {
     clear: () => {
         utils.clear()
     },
-    convert: () => {
+    convert: async () => {
         // 빌드 파일 초기화
         utils.clear()
 
@@ -177,6 +210,9 @@ const main = {
 
         // css, js 파일 생성
         utils.mkAssets()
+
+        // 작성 포스트 리스트 정리
+        await utils.mkPostList()
     }
 }
 
