@@ -1,5 +1,6 @@
 const fs = require('fs')
 const markdownIt = require('markdown-it')
+const { marked } = require('marked')
 const path = require('path')
 const layout = require('./_layout/layout')
 
@@ -13,7 +14,7 @@ const json = {
         url: `file://${__dirname}/_dist`
     },
     build: {
-        url: 'https://lazydev500.github.io'
+        url: 'https://ballboyDev.github.io'
     }
 }
 
@@ -97,6 +98,8 @@ const utils = {
                     })
 
                     let temp = layout.post(json[process.env.NODE_ENV].url, sideBar, markdownIt().render(mdFile))
+                    // let temp = layout.post(json[process.env.NODE_ENV].url, sideBar, marked.parse(mdFile))
+
                     temp = temp.replaceAll(`s-[${fileNum}]`, `selected`)
                     temp = temp.replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
                     temp = temp.replaceAll('<h3><a href="">HOME</a></h3>', `<h3><a href="${json[process.env.NODE_ENV].url}/index.html">HOME</a></h3>`)
@@ -134,6 +137,8 @@ const utils = {
             const mdFile = fs.readFileSync(`${json.common.post}/${v}`, 'utf8')
 
             let temp = layout.post(json[process.env.NODE_ENV].url, sideBar, markdownIt().render(mdFile))
+            // let temp = layout.post(json[process.env.NODE_ENV].url, sideBar, marked.parse(mdFile))
+
             temp = temp.replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
             temp = temp.replaceAll('<h3><a href="">HOME</a></h3>', `<h3><a href="${json[process.env.NODE_ENV].url}/index.html">HOME</a></h3>`)
 
