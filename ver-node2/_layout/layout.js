@@ -1,5 +1,5 @@
 const layout = {
-    post: (url, sideBar, contents) => {
+    post: (url, sideBar, contents, title) => {
         const html = `
 <!DOCTYPE html>
 <html lang="en">
@@ -7,11 +7,11 @@ const layout = {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>심심한 개발자의 취미 생활에 오신걸 환영합니다.${!!title ? `- ${title}` : ""} </title>
 
     <link rel="stylesheet" href="${url}/assets/markdown.css">
     
-    ${process.env.NODE_ENV === 'dev' ? `
+    ${process.env.NODE_ENV === "dev" ? `
         <link rel="stylesheet" href="${process.cwd()}/_assets/skin.css">
         <script src="${process.cwd()}/_assets/skin.js"></script>
     ` : `
@@ -23,15 +23,26 @@ const layout = {
 <body>
     <div id="wrapper">
         <!-- side bar component -->
+        <div id="head-bar">
+            <img id="openNavi" class="img"
+                src="${url}/assets/img/profile.jpeg"
+                alt="" srcset="">
+            <div class="title">심심한 개발자의 취미생활</div>
+        </div>
         <div id="side-bar">
+            <img id="closeNavi" class="close"
+                src="${url}/assets/img/close.svg"
+                alt="" srcset="">
             <div class="profile">
                 <img class="img" src="${url}/assets/img/profile.jpeg" alt="" srcset="">
-                <p>ballboy's blog</p>
-                <p>welcome to my world</p>
+                <p>심심한 개발자의 취미생활</p>
+                <p>환영합니다.</p>
             </div>
-            <div class="category">
-            <h3><a href="${url}/index.html">HOME</a></h3>
-                <h3>카테고리</h3>
+            <hr />
+            <h3 class="home"><a href="${url}/index.html">HOME</a></h3>
+            <hr />
+            <h3 class="category">카테고리</h3>
+            <div class="navi">
                 <ul class="root">
                     ${sideBar}
                 </ul>

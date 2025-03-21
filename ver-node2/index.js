@@ -48,10 +48,31 @@ const utils = {
         const makeSideBar = (root) => {
             let html_sideBar = ''
 
-            const post = fs.readdirSync(root).sort((v) => {
-                const isDir = fs.statSync(`${root}/${v}`).isDirectory()
-                return isDir ? 1 : 0
-            })
+            // const post = fs.readdirSync(root).sort((v) => {
+            //     const isDir = fs.statSync(`${root}/${v}`).isDirectory()
+            //     return isDir ? 1 : 0
+            // })
+            const post = fs.readdirSync(root)
+                .sort((a, b) => {
+                    const aIsDir = fs.statSync(`${root}/${a}`).isDirectory()
+                    const bIsDir = fs.statSync(`${root}/${b}`).isDirectory()
+
+                    if (aIsDir && bIsDir) {
+                        const [aTitle, aDirNum] = a.split('_')
+                        const [bTitle, bDirNum] = b.split('_')
+                        return parseInt(aDirNum) - parseInt(bDirNum)
+                    } else if (aIsDir && !bIsDir) {
+                        return 1
+                    } else if (!aIsDir && bIsDir) {
+                        return -1
+                    } else {
+                        const [aTitle, aDate, aFileNum] = path.basename(a, path.extname(a)).split('_')
+                        const [bTitle, bDate, bFileNum] = path.basename(b, path.extname(b)).split('_')
+
+                        return parseInt(aFileNum) - parseInt(bFileNum)
+
+                    }
+                })
 
             post.map((v) => {
                 const isDir = fs.statSync(`${root}/${v}`).isDirectory()
@@ -106,10 +127,12 @@ const utils = {
                     let temp = markdownIt().render(mdFile)
                     temp = temp.replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
 
-                    const contents = layout.post(json[process.env.NODE_ENV].url, sideBar, temp).replaceAll(`s-[${fileNum}]`, `selected`)
-                    fs.writeFileSync(`${json.common.dist}/post/${fileNum}.html`, contents)
+                    const contents = layout.post(json[process.env.NODE_ENV].url, sideBar, temp, title).replaceAll(`s-[${fileNum}]`, `selected`)
 
-                    console.log(`${v} ==> ${json.common.dist}/post/${fileNum}.html`)
+                    const fileName = parseInt(fileNum) !== 0 ? fileNum : `${fileNum} [ ${title} ]`
+                    fs.writeFileSync(`${json.common.dist}/post/${fileName}.html`, contents)
+
+                    console.log(`${v} ==> ${json.common.dist}/post/${fileName}.html`)
 
                     utils.postList.push(v)
 
@@ -143,7 +166,7 @@ const utils = {
             let temp = markdownIt().render(mdFile)
             temp = temp.replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
 
-            const contents = layout.post(json[process.env.NODE_ENV].url, sideBar, temp)
+            const contents = layout.post(json[process.env.NODE_ENV].url, sideBar, temp, '')
             fs.writeFileSync(`${json.common.dist}/${path.basename(v, path.extname(v))}.html`, contents)
 
             console.log(`${v} ==> ${json.common.dist}/${path.basename(v, path.extname(v))}.html`)
@@ -169,7 +192,7 @@ const utils = {
             const post = {
                 title, date, index,
                 upload: status,
-                contents: `${index}. ${title}\n${date} => ${status ? `${json.build.url}/post/${index}.html` : 'no uploade'}\n\n`
+                contents: `${index}. ${title}\n${date} => ${status ? `${json.build.url}/post/${index}.html` : 'no upload'}\n\n`
             }
 
             list.push(post)

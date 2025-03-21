@@ -9,7 +9,6 @@ window.onload = () => {
     categoryList.map((v) => {
         const item = document.getElementById(`t-${v}`)
         item.onclick = () => {
-
             const category = document.getElementById(`c-${v}`)
             if (category.style.display === 'none') {
                 category.style.display = 'block'
@@ -19,6 +18,20 @@ window.onload = () => {
 
         }
     })
+
+    const openNavi = document.getElementById('openNavi')
+    const navi = document.getElementById('side-bar')
+    const contents = document.getElementById('contents')
+    openNavi.onclick = () => {
+        navi.style.display = 'flex'
+        contents.style.display = 'none'
+    }
+
+    const closeNavi = document.getElementById('closeNavi')
+    closeNavi.onclick = () => {
+        navi.style.display = 'none'
+        contents.style.display = 'block'
+    }
 
 
 };
