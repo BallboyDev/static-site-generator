@@ -130,7 +130,7 @@ body {
 
 }
 
-#side-bar>.navi>.root {}
+/* #side-bar>.navi>.root {} */
 
 #side-bar>.navi>.root>ul {
     margin-bottom: 1.5rem;

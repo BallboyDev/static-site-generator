@@ -124,7 +124,8 @@ const utils = {
                         sideBar = sideBar.replace(`d-[${v}]`, (fold.indexOf(v) >= 0) ? 'block' : 'none')
                     })
 
-                    let temp = markdownIt().render(mdFile)
+                    // let temp = markdownIt().render(mdFile)
+                    let temp = marked.parse(mdFile)
                     temp = temp.replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
 
                     const contents = layout.post(json[process.env.NODE_ENV].url, sideBar, temp, title).replaceAll(`s-[${fileNum}]`, `selected`)

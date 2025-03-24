@@ -1,7 +1,7 @@
-# Post List (20250321)
+# Post List (20250323)
 
-0. 블로그 만들기 - 1
-20250320 => no upload
+0. 1. 블로그 만들기 - 폴더 탐색
+20250322 => no upload
 
 1. 계란국
 20250318 => https://ballboyDev.github.io/post/1.html
@@ -32,4 +32,10 @@
 
 10. 0. 블로그 만들기 - 시작하며
 20250320 => https://ballboyDev.github.io/post/10.html
+
+11. 김 짱아찌
+20250322 => no upload
+
+12. 삼겹살 덮밥
+20250323 => no upload
 
