@@ -1,7 +1,4 @@
-# Post List (20250323)
-
-0. 1. 블로그 만들기 - 폴더 탐색
-20250322 => no upload
+# Post List (20250326)
 
 1. 계란국
 20250318 => https://ballboyDev.github.io/post/1.html
@@ -34,8 +31,14 @@
 20250320 => https://ballboyDev.github.io/post/10.html
 
 11. 김 짱아찌
-20250322 => no upload
+20250322 => https://ballboyDev.github.io/post/11.html
 
 12. 삼겹살 덮밥
-20250323 => no upload
+20250323 => https://ballboyDev.github.io/post/12.html
+
+13. 1. 블로그 만들기 - 폴더 탐색
+20250322 => https://ballboyDev.github.io/post/13.html
+
+14. 짜장 소스
+20250324 => https://ballboyDev.github.io/post/14.html
 

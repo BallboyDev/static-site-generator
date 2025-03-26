@@ -1,11 +1,15 @@
-let temp = [1, 2, 3, 4, 5]
+const fs = require('fs')
 
-console.log(temp)
-console.log(temp.length)
+const file = fs.readFileSync('./_post/develop.md', 'utf8').trim()
 
-temp.length = 10
+const point = [...file.matchAll(/---/g)].map((v) => { return v.index })
 
-console.log(temp)
-console.log(temp.length)
+if (point[0] === 0) {
+    const temp = file.substring(point[0], point[1] + 3)
+    console.log(point[0], point[1] + 3)
+    console.log(temp)
+} else {
+    console.log('no data')
+}
 
-temp.map(() => { console.log(1) })
+

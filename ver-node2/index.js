@@ -116,13 +116,21 @@ const utils = {
                 } else {
                     const [title, date, fileNum] = path.basename(v, path.extname(v)).split('_')
 
-                    const mdFile = fs.readFileSync(`${root}/${v}`, 'utf8')
-
                     let sideBar = utils.sideBar
-
                     utils.dirNumber.map((v) => {
                         sideBar = sideBar.replace(`d-[${v}]`, (fold.indexOf(v) >= 0) ? 'block' : 'none')
                     })
+
+                    const mdFile = fs.readFileSync(`${root}/${v}`, 'utf8').trim()
+
+                    // let tempMdFile = fs.readFileSync(`${root}/${v}`, 'utf8').trim()
+                    // let mdFile = ''
+
+                    // const point = [...tempMdFile.matchAll(/---/g)].map((v) => { return v.index })
+                    // if (point[0] === 0) {
+                    //     const metaData = tempMdFile.substring(point[0], point[1] + 3)
+                    //     mdFile = tempMdFile.replace(metaData, '')
+                    // }
 
                     // let temp = markdownIt().render(mdFile)
                     let temp = marked.parse(mdFile)
@@ -169,6 +177,12 @@ const utils = {
 
             const contents = layout.post(json[process.env.NODE_ENV].url, sideBar, temp, '')
             fs.writeFileSync(`${json.common.dist}/${path.basename(v, path.extname(v))}.html`, contents)
+
+            // if (v === 'develop.md') {
+            //     console.log()
+            //     console.log(mdFile)
+            //     console.log()
+            // }
 
             console.log(`${v} ==> ${json.common.dist}/${path.basename(v, path.extname(v))}.html`)
         })

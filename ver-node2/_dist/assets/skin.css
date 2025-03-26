@@ -14,15 +14,18 @@ body {
     background-color: #0d1117;
 }
 
-/* common */
+/********************/
+/****** common ******/
+/********************/
 #wrapper {
     width: 100vw;
     height: 100vh;
 }
 
 
-
-/* side bar */
+/**********************/
+/****** side bar ******/
+/**********************/
 #head-bar {
     position: fixed;
     display: none;
@@ -167,7 +170,10 @@ body {
     text-overflow: ellipsis;
 }
 
-/* contents */
+
+/********************/
+/***** contents *****/
+/********************/
 #contents {
     margin-left: 16rem;
     height: 100%;
@@ -180,6 +186,27 @@ body {
 }
 
 #contents>.post {
+    margin: 1rem;
+    position: fixed;
+    width: 3rem;
+    height: 3rem;
+
+    top: 49%;
+    border-radius: 50%;
+
+}
+
+#contents>.post.next {
+    /* background-color: blue; */
+    right: 0;
+}
+
+#contents>.post.prev {
+    /* left: 16rem; */
+    /* background-color: red; */
+}
+
+#contents>.main {
     margin: 0 auto;
     padding: 2rem 0;
     overflow: scroll;

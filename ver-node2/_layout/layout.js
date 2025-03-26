@@ -52,7 +52,15 @@ const layout = {
 
         <!-- contents component -->
         <div id="contents">
-            <div class="post markdown-body">
+        <!--
+            <img class="next post"
+                src="${url}/assets/img/next.svg"
+                alt="" srcset="">
+            <img class="prev post"
+                src="${url}/assets/img/prev.svg"
+                alt="" srcset="">
+        -->
+            <div class="main markdown-body">
                 ${contents}
             </div>
         </div>
