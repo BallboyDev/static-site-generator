@@ -48,10 +48,6 @@ const utils = {
         const makeSideBar = (root) => {
             let html_sideBar = ''
 
-            // const post = fs.readdirSync(root).sort((v) => {
-            //     const isDir = fs.statSync(`${root}/${v}`).isDirectory()
-            //     return isDir ? 1 : 0
-            // })
             const post = fs.readdirSync(root)
                 .sort((a, b) => {
                     const aIsDir = fs.statSync(`${root}/${a}`).isDirectory()
@@ -66,8 +62,8 @@ const utils = {
                     } else if (!aIsDir && bIsDir) {
                         return -1
                     } else {
-                        const [aTitle, aDate, aFileNum] = path.basename(a, path.extname(a)).split('_')
-                        const [bTitle, bDate, bFileNum] = path.basename(b, path.extname(b)).split('_')
+                        const [aTitle, aFileNum] = path.basename(a, path.extname(a)).split('_')
+                        const [bTitle, bFileNum] = path.basename(b, path.extname(b)).split('_')
 
                         return parseInt(aFileNum) - parseInt(bFileNum)
 
@@ -85,7 +81,7 @@ const utils = {
                     html_sideBar = `${html_sideBar}\n<li class="cate" id="t-${dirNum}">${title}</li>`
                     html_sideBar = `${html_sideBar}\n<ul id="c-${dirNum}" style="display: d-[${dirNum}];">\n${makeSideBar(`${root}/${v}`)}\n</ul>`
                 } else {
-                    const [title, date, fileNum] = path.basename(v, path.extname(v)).split('_')
+                    const [title, fileNum] = path.basename(v, path.extname(v)).split('_')
                     if (parseInt(fileNum) !== 0) {
                         html_sideBar = `${html_sideBar}\n<a href="${json[process.env.NODE_ENV].url}/post/${fileNum}.html"><li class="docu s-[${fileNum}]">${title}</li></a>`
                     }
@@ -114,36 +110,38 @@ const utils = {
                     const [title, dirNum] = v.split('_')
                     mdToHtml(`${root}/${v}`, [...fold, dirNum])
                 } else {
-                    const [title, date, fileNum] = path.basename(v, path.extname(v)).split('_')
+                    const [title, fileNum] = path.basename(v, path.extname(v)).split('_')
 
                     let sideBar = utils.sideBar
                     utils.dirNumber.map((v) => {
                         sideBar = sideBar.replace(`d-[${v}]`, (fold.indexOf(v) >= 0) ? 'block' : 'none')
                     })
 
-                    const mdFile = fs.readFileSync(`${root}/${v}`, 'utf8').trim()
+                    let tempMdFile = fs.readFileSync(`${root}/${v}`, 'utf8').trim()
+                    const convertData = { title: title }
 
-                    // let tempMdFile = fs.readFileSync(`${root}/${v}`, 'utf8').trim()
-                    // let mdFile = ''
+                    const point = [...tempMdFile.matchAll(/```/g)].map((v) => { return v.index })
+                    if (point[0] === 0) {
+                        const tempData = tempMdFile.substring(point[0], point[1] + 3)
+                        convertData['metaData'] = JSON.parse(tempData.replaceAll('```json', '').replaceAll('```', ''))
+                        convertData['mdFile'] = marked.parse(tempMdFile.replace(tempData, '')).replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
+                    } else {
+                        convertData['metaData'] = null
+                        convertData['mdFile'] = marked.parse(tempMdFile).replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
+                    }
 
-                    // const point = [...tempMdFile.matchAll(/---/g)].map((v) => { return v.index })
-                    // if (point[0] === 0) {
-                    //     const metaData = tempMdFile.substring(point[0], point[1] + 3)
-                    //     mdFile = tempMdFile.replace(metaData, '')
-                    // }
-
-                    // let temp = markdownIt().render(mdFile)
-                    let temp = marked.parse(mdFile)
-                    temp = temp.replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
-
-                    const contents = layout.post(json[process.env.NODE_ENV].url, sideBar, temp, title).replaceAll(`s-[${fileNum}]`, `selected`)
+                    const contents = layout.post(json[process.env.NODE_ENV].url, sideBar, convertData).replaceAll(`s-[${fileNum}]`, `selected`)
 
                     const fileName = parseInt(fileNum) !== 0 ? fileNum : `${fileNum} [ ${title} ]`
                     fs.writeFileSync(`${json.common.dist}/post/${fileName}.html`, contents)
 
-                    console.log(`${v} ==> ${json.common.dist}/post/${fileName}.html`)
+                    console.log(`\n${v} ==> ${json.common.dist}/post/${fileName}.html`)
+                    console.log(convertData.metaData)
 
-                    utils.postList.push(v)
+                    utils.postList.push({
+                        file: v,
+                        metaData: { ...convertData.metaData }
+                    })
 
                 }
             })
@@ -170,32 +168,41 @@ const utils = {
         })
 
         utils.baseFile.map((v) => {
-            const mdFile = fs.readFileSync(`${json.common.post}/${v}`, 'utf8')
 
-            let temp = markdownIt().render(mdFile)
-            temp = temp.replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
+            let tempMdFile = fs.readFileSync(`${json.common.post}/${v}`, 'utf8').trim()
+            const convertData = {}
 
-            const contents = layout.post(json[process.env.NODE_ENV].url, sideBar, temp, '')
+            const point = [...tempMdFile.matchAll(/```/g)].map((v) => { return v.index })
+            if (point[0] === 0) {
+                const tempData = tempMdFile.substring(point[0], point[1] + 3)
+                convertData['metaData'] = JSON.parse(tempData.replaceAll('```json', '').replaceAll('```', ''))
+                convertData['mdFile'] = marked.parse(tempMdFile.replace(tempData, '')).replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
+            } else {
+
+                convertData['metaData'] = null
+                convertData['mdFile'] = marked.parse(tempMdFile).replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
+            }
+
+            const contents = layout.post(json[process.env.NODE_ENV].url, sideBar, convertData)
             fs.writeFileSync(`${json.common.dist}/${path.basename(v, path.extname(v))}.html`, contents)
 
-            // if (v === 'develop.md') {
-            //     console.log()
-            //     console.log(mdFile)
-            //     console.log()
-            // }
-
-            console.log(`${v} ==> ${json.common.dist}/${path.basename(v, path.extname(v))}.html`)
+            console.log(`\n${v} ==> ${json.common.dist}/${path.basename(v, path.extname(v))}.html`)
+            console.log(convertData.metaData)
         })
     },
     mkPostList: async () => {
         console.log('\n##### [ mkPostList ] #####')
 
         let contents = `# Post List (${dayjs().format('YYYYMMDD')})\n\n`
+        contents = `${contents}||title|date|prev|next|url|\n|:-:|:--|:-:|:-:|:-:|:--|\n`
+
+        // 2
         const list = []
 
         for (let i = 0; i < utils.postList.length; i++) {
-            const [title, date, index] = path.basename(utils.postList[i], path.extname(utils.postList[i])).split('_')
             let status = false
+            const { file, metaData } = utils.postList[i]
+            const [title, index] = path.basename(file, path.extname(file)).split('_')
 
             try {
                 let temp = await axios.get(`${json.build.url}/post/${index}.html`)
@@ -204,18 +211,16 @@ const utils = {
                 // console.log(err)
             }
 
-            const post = {
-                title, date, index,
-                upload: status,
-                contents: `${index}. ${title}\n${date} => ${status ? `${json.build.url}/post/${index}.html` : 'no upload'}\n\n`
-            }
+            list.push({
+                title,
+                index,
+                contents: `|${index}|${title}|${metaData.date}|${metaData?.prev || ''}|${metaData?.next || ''}|${json.build.url}/post/${index}.html|\n`
+            })
 
-            list.push(post)
         }
 
         list.sort((a, b) => { return parseInt(a.index) - parseInt(b.index) }).map((v) => {
             contents = `${contents}${v.contents}`
-            // console.log(v.contents)
         })
 
         fs.writeFileSync(`${__dirname}/posting.md`, contents)

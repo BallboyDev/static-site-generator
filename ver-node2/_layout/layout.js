@@ -1,5 +1,10 @@
 const layout = {
-    post: (url, sideBar, contents, title) => {
+    // post: (url, sideBar, contents, title) => {
+    post: (url, sideBar, convertData) => {
+        // console.log(url)
+        // console.log(sideBar)
+        // console.log(convertData)
+
         const html = `
 <!DOCTYPE html>
 <html lang="en">
@@ -7,7 +12,7 @@ const layout = {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>심심한 개발자의 취미 생활에 오신걸 환영합니다.${!!title ? `- ${title}` : ""} </title>
+    <title>심심한 개발자의 취미 생활에 오신걸 환영합니다.${!!convertData?.title ? `- ${convertData.title}` : ""} </title>
 
     <link rel="stylesheet" href="${url}/assets/markdown.css">
     
@@ -52,16 +57,27 @@ const layout = {
 
         <!-- contents component -->
         <div id="contents">
-        <!--
-            <img class="next post"
-                src="${url}/assets/img/next.svg"
-                alt="" srcset="">
-            <img class="prev post"
-                src="${url}/assets/img/prev.svg"
-                alt="" srcset="">
-        -->
+            
+            ${!!convertData.metaData?.prev ? `
+                <a href="${url}/post/${convertData.metaData.prev}.html" class="prev post">
+                    <img 
+                        src="${url}/assets/img/prev.svg"
+                        alt="" srcset="">
+                </a>
+            ` : ""}
+            
+
+            ${!!convertData.metaData?.next ? `
+                <a href="${url}/post/${convertData.metaData.next}.html" class="next post">
+                    <img 
+                        src="${url}/assets/img/next.svg"
+                        alt="" srcset="">
+                </a>
+            ` : ''}
+            
+            
             <div class="main markdown-body">
-                ${contents}
+                ${convertData.mdFile}
             </div>
         </div>
     </div>

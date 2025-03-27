@@ -1,3 +1,11 @@
+```json
+{
+    "date": 99999999,
+    "prev":null,
+    "next":null
+}
+```
+
 # TITLE
 
 ```
