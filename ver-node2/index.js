@@ -31,9 +31,6 @@ const utils = {
         if (fs.existsSync(json.common.dist)) {
             fs.rmSync(json.common.dist, { recursive: true })
         }
-        if (fs.existsSync(`${__dirname}/list.md`)) {
-            fs.rmSync(`${__dirname}/list.md`)
-        }
         fs.mkdirSync(`${json.common.dist}`)
         fs.mkdirSync(`${json.common.dist}/post`)
         fs.mkdirSync(`${json.common.dist}/assets`)
@@ -102,6 +99,8 @@ const utils = {
         const mdToHtml = (root, fold = []) => {
             const post = fs.readdirSync(root)
 
+
+
             post.map((v) => {
                 const isDir = fs.statSync(`${root}/${v}`).isDirectory()
 
@@ -135,8 +134,8 @@ const utils = {
                     const fileName = parseInt(fileNum) !== 0 ? fileNum : `${fileNum} [ ${title} ]`
                     fs.writeFileSync(`${json.common.dist}/post/${fileName}.html`, contents)
 
-                    console.log(`\n${v} ==> ${json.common.dist}/post/${fileName}.html`)
-                    console.log(convertData.metaData)
+                    console.log(`${v} ==> ${json.common.dist}/post/${fileName}.html`)
+                    // console.log(convertData.metaData)
 
                     utils.postList.push({
                         file: v,
@@ -186,17 +185,18 @@ const utils = {
             const contents = layout.post(json[process.env.NODE_ENV].url, sideBar, convertData)
             fs.writeFileSync(`${json.common.dist}/${path.basename(v, path.extname(v))}.html`, contents)
 
-            console.log(`\n${v} ==> ${json.common.dist}/${path.basename(v, path.extname(v))}.html`)
-            console.log(convertData.metaData)
+            console.log(`${v} ==> ${json.common.dist}/${path.basename(v, path.extname(v))}.html`)
+            // console.log(convertData.metaData)
         })
     },
     mkPostList: async () => {
         console.log('\n##### [ mkPostList ] #####')
 
         let contents = `# Post List (${dayjs().format('YYYYMMDD')})\n\n`
-        contents = `${contents}||title|date|prev|next|url|\n|:-:|:--|:-:|:-:|:-:|:--|\n`
+        let indexPage = `||index.html||||${json.build.url}/index.html|\n`
 
-        // 2
+        contents = `${contents}||title|date|prev|next|url|\n|:-:|:--|:-:|:-:|:-:|:--|\n${indexPage}`
+
         const list = []
 
         for (let i = 0; i < utils.postList.length; i++) {
@@ -214,7 +214,7 @@ const utils = {
             list.push({
                 title,
                 index,
-                contents: `|${index}|${title}|${metaData.date}|${metaData?.prev || ''}|${metaData?.next || ''}|${json.build.url}/post/${index}.html|\n`
+                contents: `|${index}|${title}|${metaData.date}|${metaData?.prev || ''}|${metaData?.next || ''}|${status ? `${json.build.url}/post/${index}.html` : 'not yet'}|\n`
             })
 
         }
