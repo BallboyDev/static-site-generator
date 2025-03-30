@@ -46,6 +46,7 @@ const layout = {
             <hr />
             <h3 class="home"><a href="${url}/index.html">HOME</a></h3>
             <hr />
+            <!-- <h3 class="category">카테고리 (${convertData.totalCount})</h3> -->
             <h3 class="category">카테고리</h3>
             <div class="navi">
                 <ul class="root">

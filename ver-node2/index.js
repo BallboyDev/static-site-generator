@@ -22,6 +22,7 @@ const json = {
 
 const utils = {
     sideBar: '',
+    totalCount: 0,
     dirNumber: [],
     baseFile: ['index.md', 'develop.md', 'template.md'],
     postList: [],
@@ -44,6 +45,7 @@ const utils = {
 
         const makeSideBar = (root) => {
             let html_sideBar = ''
+            let htmlList = []
 
             const post = fs.readdirSync(root)
                 .sort((a, b) => {
@@ -67,39 +69,65 @@ const utils = {
                     }
                 })
 
-            post.map((v) => {
-                const isDir = fs.statSync(`${root}/${v}`).isDirectory()
+            const pIsDir = post.map((v) => {
+                // return 1: 포스팅 된 파일 / 0: 포스팅 전 or 포스팅 안할 파일 / -1: 디렉토리
+                const type = fs.statSync(`${root}/${v}`).isDirectory()
+
+                if (!type) {
+                    const [title, fileNum] = path.basename(v, path.extname(v)).split('_')
+                    if (parseInt(fileNum) !== 0) {
+                        return 1
+                    } else {
+                        return 0
+                    }
+                } else {
+                    return -1
+                }
+            })
+            let count = pIsDir.filter((v) => {
+                return v === 1
+            }).length
+
+            post.map((v, i) => {
+                // const isDir = fs.statSync(`${root}/${v}`).isDirectory()
+                const isDir = pIsDir[i] === -1
+
                 if (utils.baseFile.some((file) => { return file === v })) { }
                 else if (isDir) {
                     const [title, dirNum] = v.split('_')
 
-                    dirNumber.push(dirNum)
+                    if (!!dirNum && dirNum !== '0') {
+                        dirNumber.push(dirNum)
 
-                    html_sideBar = `${html_sideBar}\n<li class="cate" id="t-${dirNum}">${title}</li>`
-                    html_sideBar = `${html_sideBar}\n<ul id="c-${dirNum}" style="display: d-[${dirNum}];">\n${makeSideBar(`${root}/${v}`)}\n</ul>`
+                        const temp = makeSideBar(`${root}/${v}`)
+                        count = count + temp.count
+
+                        htmlList.push(`<li class="cate" id="t-${dirNum}">${title} (${temp.count})</li>`)
+                        htmlList.push(`<ul id="c-${dirNum}" style="display: d-[${dirNum}];">\n${temp.html}\n</ul>`)
+                    }
+
                 } else {
                     const [title, fileNum] = path.basename(v, path.extname(v)).split('_')
                     if (parseInt(fileNum) !== 0) {
-                        html_sideBar = `${html_sideBar}\n<a href="${json[process.env.NODE_ENV].url}/post/${fileNum}.html"><li class="docu s-[${fileNum}]">${title}</li></a>`
+                        htmlList.push(`<a href="${json[process.env.NODE_ENV].url}/post/${fileNum}.html"><li class="docu s-[${fileNum}]">${title}</li></a>`)
                     }
-
                 }
             })
-            return html_sideBar
+
+            return { html: htmlList.join('\n'), count: count }
         }
 
         const result = makeSideBar(json.common.post)
 
         utils.dirNumber = dirNumber
-        utils.sideBar = result
+        utils.sideBar = result.html
+        utils.totalCount = result.count - fs.readdirSync(json.common.post).filter((v) => { return utils.baseFile.some((file) => { return file === v }) }).length
     },
     mkPost: () => {
         console.log('\n##### [ mkPost ] #####')
 
         const mdToHtml = (root, fold = []) => {
             const post = fs.readdirSync(root)
-
-
 
             post.map((v) => {
                 const isDir = fs.statSync(`${root}/${v}`).isDirectory()
@@ -117,7 +145,7 @@ const utils = {
                     })
 
                     let tempMdFile = fs.readFileSync(`${root}/${v}`, 'utf8').trim()
-                    const convertData = { title: title }
+                    const convertData = { title: title, totalCount: utils.totalCount }
 
                     const point = [...tempMdFile.matchAll(/```/g)].map((v) => { return v.index })
                     if (point[0] === 0) {
@@ -169,7 +197,7 @@ const utils = {
         utils.baseFile.map((v) => {
 
             let tempMdFile = fs.readFileSync(`${json.common.post}/${v}`, 'utf8').trim()
-            const convertData = {}
+            const convertData = { totalCount: utils.totalCount }
 
             const point = [...tempMdFile.matchAll(/```/g)].map((v) => { return v.index })
             if (point[0] === 0) {
