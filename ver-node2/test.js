@@ -1,8 +1,9 @@
+const a1 = undefined
+const a2 = 0
+const a3 = '0'
 
-const temp = {
-    metaData: { date: 20250324 },
-    mdFile: '\n'
-}
+console.log(!a1, !a2, !a3)
 
-console.log(!!temp.metaData?.date)
-console.log(!!temp.metaData?.date2)
+console.log(parseInt(a1) === 0)
+console.log(parseInt(a2) === 0)
+console.log(parseInt(a3) === 0)

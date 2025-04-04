@@ -47,12 +47,16 @@ const utils = {
             let html_sideBar = ''
             let htmlList = []
 
-            const post = fs.readdirSync(root)
+            const post = fs.readdirSync(root).filter((v) => { return v !== '_Common' })
                 .sort((a, b) => {
                     const aIsDir = fs.statSync(`${root}/${a}`).isDirectory()
                     const bIsDir = fs.statSync(`${root}/${b}`).isDirectory()
 
-                    if (aIsDir && bIsDir) {
+                    if (a === 'index.md') {
+                        return -1
+                    } else if (b === 'index.md') {
+                        return 1
+                    } else if (aIsDir && bIsDir) {
                         const [aTitle, aDirNum] = a.split('_')
                         const [bTitle, bDirNum] = b.split('_')
                         return parseInt(aDirNum) - parseInt(bDirNum)
@@ -88,12 +92,13 @@ const utils = {
                 return v === 1
             }).length
 
+
+
             post.map((v, i) => {
                 // const isDir = fs.statSync(`${root}/${v}`).isDirectory()
                 const isDir = pIsDir[i] === -1
 
-                if (utils.baseFile.some((file) => { return file === v })) { }
-                else if (isDir) {
+                if (isDir) {
                     const [title, dirNum] = v.split('_')
 
                     if (!!dirNum && dirNum !== '0') {
@@ -108,7 +113,13 @@ const utils = {
 
                 } else {
                     const [title, fileNum] = path.basename(v, path.extname(v)).split('_')
-                    if (parseInt(fileNum) !== 0) {
+
+                    console.log(title, fileNum)
+
+                    if (title === 'index') {
+                        const [rootTitle, rootNum] = path.basename(root).split('_')
+                        htmlList.push(`<a href="${json[process.env.NODE_ENV].url}/post/i_${rootNum}.html"><li class="docu s-[i_${rootNum}]">${rootTitle}</li></a>`)
+                    } else if (!!fileNum && parseInt(fileNum) !== 0) {
                         htmlList.push(`<a href="${json[process.env.NODE_ENV].url}/post/${fileNum}.html"><li class="docu s-[${fileNum}]">${title}</li></a>`)
                     }
                 }
@@ -127,13 +138,12 @@ const utils = {
         console.log('\n##### [ mkPost ] #####')
 
         const mdToHtml = (root, fold = []) => {
-            const post = fs.readdirSync(root)
+            const post = fs.readdirSync(root).filter((v) => { return v !== '_Common' })
 
             post.map((v) => {
                 const isDir = fs.statSync(`${root}/${v}`).isDirectory()
 
-                if (utils.baseFile.some((file) => { return file === v })) { }
-                else if (isDir) {
+                if (isDir) {
                     const [title, dirNum] = v.split('_')
                     mdToHtml(`${root}/${v}`, [...fold, dirNum])
                 } else {
@@ -157,12 +167,25 @@ const utils = {
                         convertData['mdFile'] = marked.parse(tempMdFile).replaceAll(/(?<=")[^"]*(?=assets)/g, `${json[process.env.NODE_ENV].url}/`)
                     }
 
-                    const contents = layout.post(json[process.env.NODE_ENV].url, sideBar, convertData).replaceAll(`s-[${fileNum}]`, `selected`)
+                    let contents = ''
+                    let createFile = ''
+                    if (title === 'index') {
+                        const [rootTitle, rootNum] = path.basename(root).split('_')
+                        contents = layout.post(json[process.env.NODE_ENV].url, sideBar, convertData).replaceAll(`s-[i_${rootNum}]`, `selected`)
 
-                    const fileName = parseInt(fileNum) !== 0 ? fileNum : `${fileNum} [ ${title} ]`
-                    fs.writeFileSync(`${json.common.dist}/post/${fileName}.html`, contents)
+                        fs.writeFileSync(`${json.common.dist}/post/i_${rootNum}.html`, contents)
 
-                    console.log(`${v} ==> ${json.common.dist}/post/${fileName}.html`)
+                        createFile = `i_${rootNum}`
+                    } else if (!!fileNum && parseInt(fileNum) !== 0) {
+                        contents = layout.post(json[process.env.NODE_ENV].url, sideBar, convertData).replaceAll(`s-[${fileNum}]`, `selected`)
+
+                        const fileName = parseInt(fileNum) !== 0 ? fileNum : `${fileNum} [ ${title} ]`
+                        fs.writeFileSync(`${json.common.dist}/post/${fileName}.html`, contents)
+
+                        createFile = fileName
+                    }
+
+                    console.log(`${v} ==> ${json.common.dist}/post/${createFile}.html`)
                     // console.log(convertData.metaData)
 
                     utils.postList.push({
@@ -196,7 +219,7 @@ const utils = {
 
         utils.baseFile.map((v) => {
 
-            let tempMdFile = fs.readFileSync(`${json.common.post}/${v}`, 'utf8').trim()
+            let tempMdFile = fs.readFileSync(`${json.common.post}/_Common/${v}`, 'utf8').trim()
             const convertData = { totalCount: utils.totalCount }
 
             const point = [...tempMdFile.matchAll(/```/g)].map((v) => { return v.index })
@@ -230,7 +253,7 @@ const utils = {
         for (let i = 0; i < utils.postList.length; i++) {
             let status = false
             const { file, metaData } = utils.postList[i]
-            const [title, index] = path.basename(file, path.extname(file)).split('_')
+            const [title, index = 0] = path.basename(file, path.extname(file)).split('_')
 
             try {
                 let temp = await axios.get(`${json.build.url}/post/${index}.html`)
@@ -242,7 +265,7 @@ const utils = {
             list.push({
                 title,
                 index,
-                contents: `|${index}|${title}|${metaData.date}|${metaData?.prev || ''}|${metaData?.next || ''}|${status ? `${json.build.url}/post/${index}.html` : 'not yet'}|\n`
+                contents: `|${index}|${title}|${metaData?.date || '99999999'}|${metaData?.prev || ''}|${metaData?.next || ''}|${status ? `${json.build.url}/post/${index}.html` : 'not yet'}|\n`
             })
 
         }
