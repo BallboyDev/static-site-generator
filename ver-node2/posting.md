@@ -3,7 +3,9 @@
 ||title|date|prev|next|url|
 |:-:|:--|:-:|:-:|:-:|:--|
 ||index.html||||https://ballboyDev.github.io/index.html|
+|0|Dentium|99999999|||not yet|
 |0|Douzone|20250330|||not yet|
+|0|Goorm|99999999|||not yet|
 |1|계란국|20250318|||https://ballboyDev.github.io/post/1.html|
 |2|미역국|20250318|||https://ballboyDev.github.io/post/2.html|
 |3|vim 에디터 정리|20250319|||https://ballboyDev.github.io/post/3.html|
