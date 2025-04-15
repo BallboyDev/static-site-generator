@@ -8,7 +8,7 @@
     "build": "NODE_ENV=build node index.js",
     "clear": "NODE_ENV=clear node index.js",
     "test": "node test.js",
-    "app": "node app.js"
+    "app": "NODE_ENV=dev node app.js"
   },
   "author": "",
   "license": "ISC",

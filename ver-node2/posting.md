@@ -1,8 +1,9 @@
-# Post List (20250410)
+# Post List (20250415)
 
 ||title|date|prev|next|url|
 |:-:|:--|:-:|:-:|:-:|:--|
 ||index.html||||https://ballboyDev.github.io/index.html|
+|0|사람들은 왜 디즈니의 PC 주의를 싫어하는가|99999999|||not yet|
 |0|9. 블로그 만들기 - 마크다운 변환 모듈 개발|20250404|||not yet|
 |0|Dentium|99999999|||not yet|
 |0|Douzone|20250330|||not yet|
