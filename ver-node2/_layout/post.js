@@ -112,8 +112,8 @@ const output = (param) => {
         },
         tag: {
             assets: assets({ mdUrl: param.url, assetsUrl: env === 'dev' ? process.cwd() : param.url }),
-            prev: prev({ url: param.url, prev: param.prev }),
-            next: next({ url: param.url, next: param.next }),
+            prev: '', //prev({ url: param.url, prev: param.prev }),
+            next: '', //next({ url: param.url, next: param.next }),
             navi: param.navi.join('\n'),
             contents: param.contents,
         }

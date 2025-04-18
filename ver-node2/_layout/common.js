@@ -1,3 +1,0 @@
-const head = (param) => {
-    return ''
-}

@@ -28,6 +28,8 @@ const app = {
         app.mkNavi();
         app.mkMainPage();
         app.mkPostPage();
+
+        console.log(utils.navi.join('\n'))
     },
     init: () => {
         console.log('##### [ app.init ] #####')
@@ -69,7 +71,7 @@ const app = {
                     )
                 }
 
-                temp[`${isDir ? `dir` : 'post'}_${title}_${num}`] = item
+                temp[`${isDir ? `dir` : 'post'}_${num}`] = item
 
                 if (!isDir) {
                     utils.contents.push(item)
@@ -81,9 +83,7 @@ const app = {
 
         utils.post = { ...recursion(utils.path.post) }
 
-        if (env === 'dev') {
-            fs.writeFileSync(`${__dirname}/test/test.json`, JSON.stringify(utils.post))
-        }
+        fs.writeFileSync(`test/test.json`, JSON.stringify(utils.post))
     },
     mkNavi: () => {
         console.log('##### [ app.mkNavi ] #####')
@@ -94,26 +94,27 @@ const app = {
             const item = Object.keys(root)
 
             item.map((v) => {
+                const [type, num] = v.split('_')
                 if (!!root[v].posting) {
-                    tagList.push(`<li>${root[v].title}</li>`)
 
-                    if (!!root[v]?.children) {
+                    if (type === 'dir') {
+                        tagList.push(`<li>${root[v].title}</li>`)
                         tagList.push('<ul>')
                         tagList.push(recursion(root[v].children))
                         tagList.push('</ul>')
+                    } else {
+                        tagList.push(`<a href="${utils.path[env]}/post/${num}.html">`)
+                        tagList.push(`<li>${root[v].title}</li>`)
+                        tagList.push(`</a>`)
                     }
                 }
-
             })
+
             return tagList
         }
 
         recursion(utils.post)
         utils.navi = tagList
-
-        if (env === 'dev') {
-            fs.writeFileSync(`${__dirname}/test/navi.html`, tagList.join('\n'))
-        }
     },
     mkMainPage: () => {
         console.log('##### [ app.mkMainPage ] #####')
@@ -122,7 +123,7 @@ const app = {
         console.log('##### [ app.mkPostPage ] #####')
 
         utils.contents.map((v) => {
-            console.log(v)
+            // console.log(v)
             const mdFile = fs.readFileSync(v.path, 'utf8').trim()
             const htmlFile = marked.parse(mdFile)
 
