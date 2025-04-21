@@ -11,10 +11,8 @@ const env = process.env.NODE_ENV
 
 const utils = {
     path: {
-        index: '_post',
-        // index: '/Users/ballboy/workspace/project/static-site-generator/post',
-        post: '_post',
-        // post: '/Users/ballboy/workspace/project/static-site-generator/post',
+        index: './index.md',
+        post: '/Users/ballboy/workspace/lazyDev/blog',
         dist: '_dist',
         assets: '_assets',
         dev: `file://${__dirname}/_dist`,
@@ -175,7 +173,7 @@ const app = {
     mkMainPage: () => {
         console.log('\n##### [ app.mkMainPage ] #####')
 
-        const mdFile = matter(fs.readFileSync(`${utils.path.index}/index.md`, 'utf8').trim())
+        const mdFile = matter(fs.readFileSync(`${utils.path.index}`, 'utf8').trim())
         const htmlFile = marked.parse(mdFile.content)
 
         const metaData = {

@@ -18,4 +18,4 @@
 |14|짜장소스|20250324|||https://ballboydev.github.io/post/14.html|
 |15|docker 기본 정리|20250328|||https://ballboydev.github.io/post/15.html|
 |16|2. 블로그 만들기 - 마크다운 변환|20250327|13|17|https://ballboydev.github.io/post/16.html|
-|17|3. 블로그 만들기 - 리펙토링|99999999|16||not yet|
+|17|3. 블로그 만들기 - 리펙토링|99999999|16||https://ballboydev.github.io/post/17.html|
