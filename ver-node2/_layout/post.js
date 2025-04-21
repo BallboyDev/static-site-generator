@@ -1,10 +1,22 @@
 const assets = (param) => {
-    const { mdUrl, assetsUrl } = param
+    const { assetsUrl, index, fold } = param
 
     const html = `
-<link rel="stylesheet" href="${mdUrl}/assets/markdown.css">
-<link rel="stylesheet" href="${assetsUrl}/_assets/skin.css">
-<script src="${assetsUrl}/_assets/skin.js"></script>
+<link rel="stylesheet" href="${assetsUrl}/markdown.css">
+<link rel="stylesheet" href="${assetsUrl}/skin.css">
+
+<style>
+    #p-${index} {
+        color: rgb(76, 193, 237) !important;
+    }
+</style>
+<script id="data" type="application/json">
+{
+    "fold": ${JSON.stringify(fold)}
+}
+</script>
+
+<script src="${assetsUrl}/skin.js"></script>
     `
 
     return html
@@ -71,7 +83,7 @@ const page = (param) => {
             <hr />
             
             <h3 class="category">카테고리</h3>
-            <div class="navi">
+            <div class="navi2">
                 <ul class="root">
 
                     ${tag.navi}
@@ -109,11 +121,16 @@ const output = (param) => {
     const temp = {
         data: {
             url: param.url,
+            index: param.index,
         },
         tag: {
-            assets: assets({ mdUrl: param.url, assetsUrl: env === 'dev' ? process.cwd() : param.url }),
-            prev: '', //prev({ url: param.url, prev: param.prev }),
-            next: '', //next({ url: param.url, next: param.next }),
+            assets: assets({
+                assetsUrl: env === 'dev' ? `${process.cwd()}/_assets` : `${param.url}/assets`,
+                index: param.index,
+                fold: param.fold
+            }),
+            prev: (param.prev !== 0) ? prev({ url: param.url, prev: param.prev }) : '',
+            next: (param.next !== 0) ? next({ url: param.url, next: param.next }) : '',
             navi: param.navi.join('\n'),
             contents: param.contents,
         }
