@@ -12,7 +12,7 @@ const env = process.env.NODE_ENV
 const utils = {
     path: {
         index: './index.md',
-        post: '/Users/ballboy/workspace/lazyDev/blog',
+        post: '_post',
         dist: '_dist',
         assets: '_assets',
         dev: `file://${__dirname}/_dist`,
@@ -56,7 +56,7 @@ const app = {
         console.group('set Path')
         console.log(`index: ${utils.path.index}`)
         console.log(`post: ${utils.path.post}`)
-        console.log(`build: ${utils.path.build}`)
+        console.log(`${env}: ${utils.path[env]}`)
         console.groupEnd()
 
         console.group('set Image')
@@ -101,7 +101,7 @@ const app = {
                     const title = mdFile.data?.title;
                     const index = mdFile.data?.index || 0;
 
-                    if (parseInt(index) !== 0) {
+                    if (v !== '.DS_Store') {
                         const item = {
                             title,
                             file: path.basename(v, path.extname(v)),
@@ -110,7 +110,7 @@ const app = {
                             fold,
                             date: mdFile.data?.date || '99999999',
                             ...mdFile.data,
-                            content: mdFile.content
+                            content: mdFile.content.replace(/<.*?_assets\/(img\/[^>]+)>/g, `<${utils.path[env]}/assets/$1>`)
                         };
 
                         temp[`post_${index}`] = item;
@@ -158,9 +158,11 @@ const app = {
                     tagList.push(recursion(root[v].children))
                     tagList.push('</ul>')
                 } else {
-                    tagList.push(`<a href="${utils.path[env]}/post/${num}.html">`)
-                    tagList.push(`<li id="p-${num}">${root[v]?.title || root[v]?.file}</li>`)
-                    tagList.push(`</a>`)
+                    if (parseInt(root[v].index) !== 0) {
+                        tagList.push(`<a href="${utils.path[env]}/post/${root[v].index}.html">`)
+                        tagList.push(`<li id="p-${root[v].index}">${root[v]?.title || root[v]?.file}</li>`)
+                        tagList.push(`</a>`)
+                    }
                 }
             })
 
@@ -196,6 +198,8 @@ const app = {
 
         utils.contents.sort((a, b) => {
             return a.index - b.index
+        }).filter((v) => {
+            return parseInt(v.index) !== 0
         }).map((v) => {
 
             // ballboy / 포스팅 파일이 많아졌을때 성능/용량 이슈 발생 하지 않을지...?
@@ -215,7 +219,7 @@ const app = {
             // }
 
             // ballboy / 이미지 URL 변환 작업
-            const htmlFile = marked.parse(v.content)//.replaceAll(/(?<=")[^"]*(?=assets)/g, `${utils.path[env]}/`)
+            const htmlFile = marked.parse(v.content)
 
             const metaData = {
                 url: utils.path[env],
@@ -242,11 +246,14 @@ const app = {
                 let temp = await axios.get(`${utils.path.build}/post/${item.index}.html`)
                 status = temp.status === 200
             } catch (err) {
-                console.log(`ERROR >> ${item.title}`)
+                // console.log(err)
+                if (err.status !== 404) {
+                    console.log(`ERROR >> ${item?.title || item?.file || 'no file'}`)
+                }
             }
 
             const text = `|${item.index}|${item?.title || item?.file}|${item.date}|${item?.prev || ''}|${item?.next || ''}|${status ? `${utils.path.build}/post/${item.index}.html` : 'not yet'}|`
-            console.log(text)
+            console.log(`[ ${item.index} ] ${item?.title || item?.file}`)
             utils.posting.push(text)
         }
 
