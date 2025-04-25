@@ -51,3 +51,6 @@ const foldNavi = (num) => {
     }
 }
 
+const postList = () => {
+    location.href = 'https://www.naver.com'
+}

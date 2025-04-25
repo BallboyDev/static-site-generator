@@ -11,30 +11,29 @@ const env = process.env.NODE_ENV
 
 const utils = {
     path: {
-        index: './index.md',
+        index: '_post/index.md',
         post: '_post',
         dist: '_dist',
         assets: '_assets',
         dev: `file://${__dirname}/_dist`,
-        build: 'https://ballboydev.github.io',
+        build: 'https://ballboyDev.github.io',
     },
     img: {},
     post: {},
     navi: [],
     contents: [],
-    posting: [`# Posting List (${dayjs().format("YYYY.MM.DD")})\n`, '||title|date|prev|next|url|', '|:-:|:--|:-:|:-:|:-:|:--|'],
 }
 
 const app = {
-    run: () => {
+    run: async () => {
         console.log(`##### [ app.run < ${env} > ] #####`)
 
-        app.init()
-        app.mkJson();
-        app.mkNavi();
-        app.mkMainPage();
-        app.mkPostPage();
-        app.finalWork();
+        await app.init()
+        await app.mkJson();
+        await app.mkNavi();
+        await app.mkPostPage();
+        await app.finalWork();
+        await app.mkMainPage();
     },
     init: () => {
         console.log('\n##### [ app.init ] #####')
@@ -52,6 +51,7 @@ const app = {
         fs.copyFileSync(`${utils.path.assets}/skin.js`, `${utils.path.dist}/assets/skin.js`)
         fs.cpSync(`${utils.path.assets}/img/`, `${utils.path.dist}/assets/img/`, { recursive: true })
 
+
         console.log('>> set Environment <<')
         console.group('set Path')
         console.log(`index: ${utils.path.index}`)
@@ -61,7 +61,6 @@ const app = {
 
         console.group('set Image')
         console.groupEnd()
-
 
     },
     mkJson: () => {
@@ -159,7 +158,8 @@ const app = {
                     tagList.push('</ul>')
                 } else {
                     if (parseInt(root[v].index) !== 0) {
-                        tagList.push(`<a href="${utils.path[env]}/post/${root[v].index}.html">`)
+                        // tagList.push(`<a href="${utils.path[env]}/post/${root[v].index}.html">`)
+                        tagList.push(`<a href="${utils.path[env]}/post/${root[v].index}${env === 'dev' ? '.html' : ''}">`)
                         tagList.push(`<li id="p-${root[v].index}">${root[v]?.title || root[v]?.file}</li>`)
                         tagList.push(`</a>`)
                     }
@@ -179,6 +179,7 @@ const app = {
         const htmlFile = marked.parse(mdFile.content)
 
         const metaData = {
+            env: env,
             url: utils.path[env],
             index: 0,
             fold: [],
@@ -222,6 +223,7 @@ const app = {
             const htmlFile = marked.parse(v.content)
 
             const metaData = {
+                env: env,
                 url: utils.path[env],
                 index: v.index,
                 fold: v.fold,
@@ -239,6 +241,18 @@ const app = {
     finalWork: async () => {
         console.log('\n##### [ app.finalWork ] #####')
 
+        const posting = [`# Posting List (${dayjs().format("YYYY.MM.DD")})\n`, '||title|date|prev|next|url|', '|:-:|:--|:-:|:-:|:-:|:--|']
+        const index = [
+            '# 심심한 개발자의 심심한 블로그',
+            '![Static Badge](https://img.shields.io/badge/yswgood0329%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=EA4335&label=gmail&labelColor=FFFFFF) [![Static Badge](https://img.shields.io/badge/%40ballboy.329-FFFFFF?style=for-the-badge&logo=instagram&logoColor=FFFFFF&label=INSTA&labelColor=E4405F)](https://www.instagram.com/ballboy.329)',
+            '- 심심한 개발자가 심심해서 만들었고 심심할때 끄적여 보는 심심한 개발자의 심심한 블로그 입니다.',
+            '- 꾸준한 기능 개발과 개발과 일상 생활과 관련된 다양한 글을 작성하기 위해 노력하고 있습니다.',
+            '',
+            `## Posting List (${dayjs().format("YYYY.MM.DD")})`,
+            '||title|date|',
+            '|:-:|:--|:-:|'
+        ]
+
         for (let i = 0; i < utils.contents.length; i++) {
             const item = utils.contents[i]
             let status = false
@@ -252,12 +266,21 @@ const app = {
                 }
             }
 
-            const text = `|${item.index}|${item?.title || item?.file}|${item.date}|${item?.prev || ''}|${item?.next || ''}|${status ? `${utils.path.build}/post/${item.index}.html` : 'not yet'}|`
+            // create posting.md
+            const text1 = `|[ ${item.index} ]|${item?.title || item?.file}|${item.date}|${item?.prev || ''}|${item?.next || ''}|${status ? `${utils.path.build}/post/${item.index}${env === 'dev' ? '.html' : ''}` : 'not yet'}|`
+            posting.push(text1)
+
+            // ballboy / create index.md / 포스팅 리스트 레이아웃을 따로 제작하는 방향으로 개선
+            if (status) {
+                const text2 = `|[ ${item.index} ]|[${item?.title || item?.file}](${utils.path[env]}/post/${item.index}${env === 'dev' ? '.html' : ''})|${item.date}|`
+                index.push(text2)
+            }
+
             console.log(`[ ${item.index} ] ${item?.title || item?.file}`)
-            utils.posting.push(text)
         }
 
-        fs.writeFileSync(`posting.md`, utils.posting.join('\n'))
+        fs.writeFileSync(`posting.md`, posting.join('\n'))
+        fs.writeFileSync(utils.path.index, index.join('\n'))
     }
 }
 

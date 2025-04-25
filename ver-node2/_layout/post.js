@@ -55,6 +55,7 @@ const page = (param) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="jrh7qB1kgowvnvE0P3KqlhI-iNmw9CvGJF4dQsaCTAk" />
     <title>심심한 개발자의 취미 생활에 오신걸 환영합니다.</title>
 
     ${tag.assets}
@@ -79,7 +80,7 @@ const page = (param) => {
                 <p>환영합니다.</p>
             </div>
             <hr />
-            <h3 class="home"><a href="${data.url}/index.html">HOME</a></h3>
+            <h3 class="home"><a href="${data.url}${data.env === 'dev' ? '/index.html' : ''}">HOME</a></h3>
             <hr />
             
             <h3 class="category">카테고리</h3>
@@ -122,6 +123,7 @@ const output = (param) => {
         data: {
             url: param.url,
             index: param.index,
+            env: param.env
         },
         tag: {
             assets: assets({
