@@ -124,8 +124,8 @@ const app = {
         }
 
         utils.post = { ...recursion(utils.path.post) }
+        fs.writeFileSync(`test.json`, JSON.stringify(utils.post))
 
-        fs.writeFileSync(`test/test.json`, JSON.stringify(utils.post))
     },
     mkNavi: () => {
         console.log('\n##### [ app.mkNavi ] #####')
@@ -206,20 +206,6 @@ const app = {
             // ballboy / 포스팅 파일이 많아졌을때 성능/용량 이슈 발생 하지 않을지...?
             // const mdFile = matter(fs.readFileSync(v.path, 'utf8').trim())
 
-            // ballboy / 이미지 URL 변환 작업
-            // const htmlFile = marked.parse(mdFile.content).replaceAll(/(?<=")[^"]*(?=assets)/g, `${utils.path[env]}/`)
-
-            // const metaData = {
-            //     url: utils.path[env],
-            //     index: v.index,
-            //     fold: v.fold,
-            //     prev: mdFile.data.prev || 0,
-            //     next: mdFile.data.next || 0,
-            //     navi: utils.navi,
-            //     contents: htmlFile
-            // }
-
-            // ballboy / 이미지 URL 변환 작업
             const htmlFile = marked.parse(v.content)
 
             const metaData = {
@@ -244,7 +230,7 @@ const app = {
         const posting = [`# Posting List (${dayjs().format("YYYY.MM.DD")})\n`, '||title|date|prev|next|url|', '|:-:|:--|:-:|:-:|:-:|:--|']
         const index = [
             '# 심심한 개발자의 심심한 블로그',
-            '![Static Badge](https://img.shields.io/badge/yswgood0329%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=EA4335&label=gmail&labelColor=FFFFFF) [![Static Badge](https://img.shields.io/badge/%40ballboy.329-FFFFFF?style=for-the-badge&logo=instagram&logoColor=FFFFFF&label=INSTA&labelColor=E4405F)](https://www.instagram.com/ballboy.329)',
+            '[![Static Badge](https://img.shields.io/badge/yswgood0329%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=EA4335&label=gmail&labelColor=FFFFFF)](https://mail.google.com/) [![Static Badge](https://img.shields.io/badge/%40ballboy.329-FFFFFF?style=for-the-badge&logo=instagram&logoColor=FFFFFF&label=INSTA&labelColor=E4405F)](https://www.instagram.com/ballboy.329)',
             '- 심심한 개발자가 심심해서 만들었고 심심할때 끄적여 보는 심심한 개발자의 심심한 블로그 입니다.',
             '- 꾸준한 기능 개발과 개발과 일상 생활과 관련된 다양한 글을 작성하기 위해 노력하고 있습니다.',
             '',
@@ -279,7 +265,7 @@ const app = {
             console.log(`[ ${item.index} ] ${item?.title || item?.file}`)
         }
 
-        fs.writeFileSync(`posting.md`, posting.join('\n'))
+        fs.writeFileSync(`readme.md`, posting.join('\n'))
         fs.writeFileSync(utils.path.index, index.join('\n'))
     }
 }

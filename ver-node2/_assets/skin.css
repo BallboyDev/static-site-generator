@@ -278,3 +278,12 @@ body {
 
     }
 }
+
+/***************************/
+/***** custom markdown *****/
+/***************************/
+
+/* p:has(img) {
+    display: flex;
+    justify-content: center;
+} */
