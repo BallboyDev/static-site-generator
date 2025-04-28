@@ -1,4 +1,4 @@
-# Posting List (2025.04.27)
+# Posting List (2025.04.28)
 
 ||title|date|prev|next|url|
 |:-:|:--|:-:|:-:|:-:|:--|
@@ -9,7 +9,7 @@
 |[ 1 ]|블로그 개발, 배포 일지|20250320||10|https://ballboyDev.github.io/post/1|
 |[ 2 ]|미역국|20250318|||https://ballboyDev.github.io/post/2|
 |[ 3 ]|vim 에디터 정리|20250319|||https://ballboyDev.github.io/post/3|
-|[ 4 ]|강된장|20250319|||https://ballboyDev.github.io/post/4|
+|[ 4 ]|양배추 강된장|20250319|||https://ballboyDev.github.io/post/4|
 |[ 5 ]|겉절이 김치|20250319|||https://ballboyDev.github.io/post/5|
 |[ 6 ]|진한 카레|20250320|||https://ballboyDev.github.io/post/6|
 |[ 7 ]|고추다대기|20250320|||https://ballboyDev.github.io/post/7|
@@ -31,5 +31,6 @@
 |[ 23 ]|Directive|20250424|22|24|https://ballboyDev.github.io/post/23|
 |[ 24 ]|Runtime|20250424|23||https://ballboyDev.github.io/post/24|
 |[ 25 ]|내 멋대로 알리오 올리오|20250424|||https://ballboyDev.github.io/post/25|
-|[ 26 ]|전자레인지로 솥밥 만들기 - 대패삼겹살 버전|20250427|||not yet|
-|[ 27 ]|내돈 내산 양념/조미료 사용 후기|20250425|||not yet|
+|[ 26 ]|전자레인지로 솥밥 만들기 - 대패삼겹살 버전|20250427|||https://ballboyDev.github.io/post/26|
+|[ 27 ]|내돈 내산 양념/조미료 사용 후기|20250425|||https://ballboyDev.github.io/post/27|
+|[ 28 ]|마요네즈 비빔 라면|202504248|||not yet|

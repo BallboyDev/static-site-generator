@@ -3,13 +3,13 @@
 - 심심한 개발자가 심심해서 만들었고 심심할때 끄적여 보는 심심한 개발자의 심심한 블로그 입니다.
 - 꾸준한 기능 개발과 개발과 일상 생활과 관련된 다양한 글을 작성하기 위해 노력하고 있습니다.
 
-## Posting List (2025.04.27)
+## Posting List (2025.04.28)
 ||title|date|
 |:-:|:--|:-:|
 |[ 1 ]|[블로그 개발, 배포 일지](https://ballboyDev.github.io/post/1)|20250320|
 |[ 2 ]|[미역국](https://ballboyDev.github.io/post/2)|20250318|
 |[ 3 ]|[vim 에디터 정리](https://ballboyDev.github.io/post/3)|20250319|
-|[ 4 ]|[강된장](https://ballboyDev.github.io/post/4)|20250319|
+|[ 4 ]|[양배추 강된장](https://ballboyDev.github.io/post/4)|20250319|
 |[ 5 ]|[겉절이 김치](https://ballboyDev.github.io/post/5)|20250319|
 |[ 6 ]|[진한 카레](https://ballboyDev.github.io/post/6)|20250320|
 |[ 7 ]|[고추다대기](https://ballboyDev.github.io/post/7)|20250320|
@@ -31,3 +31,5 @@
 |[ 23 ]|[Directive](https://ballboyDev.github.io/post/23)|20250424|
 |[ 24 ]|[Runtime](https://ballboyDev.github.io/post/24)|20250424|
 |[ 25 ]|[내 멋대로 알리오 올리오](https://ballboyDev.github.io/post/25)|20250424|
+|[ 26 ]|[전자레인지로 솥밥 만들기 - 대패삼겹살 버전](https://ballboyDev.github.io/post/26)|20250427|
+|[ 27 ]|[내돈 내산 양념/조미료 사용 후기](https://ballboyDev.github.io/post/27)|20250425|

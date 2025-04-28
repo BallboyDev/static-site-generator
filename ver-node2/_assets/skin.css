@@ -135,7 +135,7 @@ body {
     overflow: scroll;
 }
 
-#side-bar>.navi2 * {}
+/* #side-bar>.navi2 * {} */
 
 #side-bar>.navi2 ul {
     margin-left: 1rem;
