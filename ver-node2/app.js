@@ -257,7 +257,7 @@ const app = {
             posting.push(text1)
 
             // ballboy / create index.md / 포스팅 리스트 레이아웃을 따로 제작하는 방향으로 개선
-            if (status) {
+            if (item?.index && parseInt(item.index) !== 0) {
                 const text2 = `|[ ${item.index} ]|[${item?.title || item?.file}](${utils.path[env]}/post/${item.index}${env === 'dev' ? '.html' : ''})|${item.date}|`
                 index.push(text2)
             }

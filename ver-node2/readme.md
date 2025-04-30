@@ -1,4 +1,4 @@
-# Posting List (2025.04.29)
+# Posting List (2025.04.30)
 
 ||title|date|prev|next|url|
 |:-:|:--|:-:|:-:|:-:|:--|
@@ -33,5 +33,6 @@
 |[ 25 ]|내 멋대로 알리오 올리오|20250424|||https://ballboyDev.github.io/post/25.html|
 |[ 26 ]|전자레인지로 솥밥 만들기 - 대패삼겹살 버전|20250427|||https://ballboyDev.github.io/post/26.html|
 |[ 27 ]|내돈 내산 양념/조미료 사용 후기|20250425|||https://ballboyDev.github.io/post/27.html|
-|[ 28 ]|마요네즈 비빔 라면|202504248|||https://ballboyDev.github.io/post/28.html|
-|[ 29 ]|들기름 막국수|202504249|||not yet|
+|[ 28 ]|마요네즈 비빔 라면|20250428|||https://ballboyDev.github.io/post/28.html|
+|[ 29 ]|들기름 막국수|20250429|||https://ballboyDev.github.io/post/29.html|
+|[ 30 ]|멍게 비빔밥 만들기|20250430|||https://ballboyDev.github.io/post/30.html|

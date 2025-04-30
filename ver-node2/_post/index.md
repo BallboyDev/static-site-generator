@@ -3,7 +3,7 @@
 - 심심한 개발자가 심심해서 만들었고 심심할때 끄적여 보는 심심한 개발자의 심심한 블로그 입니다.
 - 꾸준한 기능 개발과 개발과 일상 생활과 관련된 다양한 글을 작성하기 위해 노력하고 있습니다.
 
-## Posting List (2025.04.29)
+## Posting List (2025.04.30)
 ||title|date|
 |:-:|:--|:-:|
 |[ 1 ]|[블로그 개발, 배포 일지](file:///Users/ballboy/workspace/project/static-site-generator/ver-node2/_dist/post/1.html)|20250320|
@@ -33,4 +33,6 @@
 |[ 25 ]|[내 멋대로 알리오 올리오](file:///Users/ballboy/workspace/project/static-site-generator/ver-node2/_dist/post/25.html)|20250424|
 |[ 26 ]|[전자레인지로 솥밥 만들기 - 대패삼겹살 버전](file:///Users/ballboy/workspace/project/static-site-generator/ver-node2/_dist/post/26.html)|20250427|
 |[ 27 ]|[내돈 내산 양념/조미료 사용 후기](file:///Users/ballboy/workspace/project/static-site-generator/ver-node2/_dist/post/27.html)|20250425|
-|[ 28 ]|[마요네즈 비빔 라면](file:///Users/ballboy/workspace/project/static-site-generator/ver-node2/_dist/post/28.html)|202504248|
+|[ 28 ]|[마요네즈 비빔 라면](file:///Users/ballboy/workspace/project/static-site-generator/ver-node2/_dist/post/28.html)|20250428|
+|[ 29 ]|[들기름 막국수](file:///Users/ballboy/workspace/project/static-site-generator/ver-node2/_dist/post/29.html)|20250429|
+|[ 30 ]|[멍게 비빔밥 만들기](file:///Users/ballboy/workspace/project/static-site-generator/ver-node2/_dist/post/30.html)|20250430|
