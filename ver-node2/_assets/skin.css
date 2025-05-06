@@ -78,6 +78,10 @@ body {
     }
 }
 
+/* #side-bar:hover {
+    width: 20rem;
+} */
+
 #side-bar>hr {
     border: 1px solid #4f4f4f;
     margin: 0 1rem;
