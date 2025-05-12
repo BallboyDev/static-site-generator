@@ -11,8 +11,8 @@ const env = process.env.NODE_ENV
 
 const utils = {
     path: {
-        index: '_post/index.md',
-        post: '_post',
+        index: '/Users/ballboy/Documents/blog/index.md', // _post/index.md
+        post: '/Users/ballboy/Documents/blog', // _post
         dist: '_dist',
         assets: '_assets',
         dev: `file://${__dirname}/_dist`,
@@ -20,6 +20,7 @@ const utils = {
     },
     img: {},
     post: {},
+    json: {},
     navi: [],
     contents: [],
 }
@@ -50,6 +51,7 @@ const app = {
         fs.copyFileSync(`${utils.path.assets}/markdown.css`, `${utils.path.dist}/assets/markdown.css`)
         fs.copyFileSync(`${utils.path.assets}/skin.js`, `${utils.path.dist}/assets/skin.js`)
         fs.cpSync(`${utils.path.assets}/img/`, `${utils.path.dist}/assets/img/`, { recursive: true })
+        fs.cpSync(`${utils.path.post}/docsImg/`, `${utils.path.dist}/assets/img/`, { recursive: true })
 
 
         console.log('>> set Environment <<')
@@ -70,7 +72,7 @@ const app = {
             const temp = {}
 
             // ballboy / index 파일과 공통 파일들의 관리 방안에 대하여 고민해보기
-            const post = fs.readdirSync(root).filter((v) => { return ['_Common', 'index.md'].indexOf(v) < 0 })
+            const post = fs.readdirSync(root).filter((v) => { return ['_Common', 'index.md', 'docsImg'].indexOf(v) < 0 })
 
             post.map((v) => {
                 const isDir = fs.statSync(`${root}/${v}`).isDirectory();
@@ -109,7 +111,7 @@ const app = {
                             fold,
                             date: mdFile.data?.date || '99999999',
                             ...mdFile.data,
-                            content: mdFile.content.replace(/<.*?_assets\/(img\/[^>]+)>/g, `<${utils.path[env]}/assets/$1>`)
+                            content: mdFile.content.replace(/<.*?docsImg\/([^>]+)>/g, `<${utils.path[env]}/assets/img/$1>`)
                         };
 
                         temp[`post_${index}`] = item;
@@ -124,6 +126,7 @@ const app = {
         }
 
         utils.post = { ...recursion(utils.path.post) }
+        console.log(utils.post)
         fs.writeFileSync(`test.json`, JSON.stringify(utils.post))
 
     },
